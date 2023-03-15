@@ -1,6 +1,7 @@
 import numpy as np
 # Importer methodes pour definir entre autres un modèle ISING
 import dimod
+import dwave.inspector
 # On importe les librairies de DWAVE
 from dwave.system.samplers import DWaveSampler
 from dwave.system.composites import EmbeddingComposite
@@ -10,7 +11,7 @@ from dwave.system.composites import EmbeddingComposite
 # On definit un group tres simple avec deux noeuds.
 # J correspond aux expressions quadratiques
 # (var1, var2):poids
-J = {(0,1):1, (1,2):1, (2,0):1}
+J = {(1,2):1, (1,4):3, (2,3):3, (4,3):4, (3,5):5, (4,5):2, (4,6):4, (5,6):2}
 # poids de chaque qubits pris individuellement
 h = {}
 
@@ -23,9 +24,10 @@ print(model)
 
 ##                RESOLUTION APPROCHEE              ##
 ##     Recuit quantique sur Machine D-WAVE          ##
-sampler = EmbeddingComposite(DWaveSampler())
+sampler = EmbeddingComposite(DWaveSampler(solver='Advantage2_prototype1.1'))
 sampler_name = sampler.properties['child_properties']['chip_id']
 response = sampler.sample(model, num_reads=5000)
 print("The solution obtained by D-Wave's quantum annealer",sampler_name,"is")
 print(response)
+#dwave.inspector.show(response)
  
